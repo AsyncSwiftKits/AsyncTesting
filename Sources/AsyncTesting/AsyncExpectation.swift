@@ -16,8 +16,8 @@ public actor AsyncExpectation {
     }
     public typealias AsyncExpectationContinuation = CheckedContinuation<Void, Error>
     public let expectationDescription: String
-    public var isInverted: Bool
-    public var expectedFulfillmentCount: Int
+    public let isInverted: Bool
+    public let expectedFulfillmentCount: Int
     
     private var fulfillmentCount: Int = 0
     private var continuation: AsyncExpectationContinuation?
