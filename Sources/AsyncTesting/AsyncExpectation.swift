@@ -51,6 +51,7 @@ public actor AsyncExpectation {
         fulfillmentCount += 1
         if fulfillmentCount == expectedFulfillmentCount {
             state = .fulfilled
+            finish()
         }
     }
     
