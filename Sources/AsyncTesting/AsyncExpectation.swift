@@ -23,10 +23,6 @@ public actor AsyncExpectation {
     private var continuation: AsyncExpectationContinuation?
     private var state: State = .pending
     
-    private var satisified: Bool {
-        fulfillmentCount == expectedFulfillmentCount
-    }
-    
     public init(description: String,
                 isInverted: Bool = false,
                 expectedFulfillmentCount: Int = 1) {
@@ -45,7 +41,6 @@ public actor AsyncExpectation {
     
     public func fulfill(file: StaticString = #filePath, line: UInt = #line) {
         guard state != .fulfilled else { return }
-        
         
         guard !isInverted else {
             XCTFail("Inverted expectation fulfilled: \(expectationDescription)", file: file, line: line)
@@ -69,7 +64,7 @@ public actor AsyncExpectation {
         // check if all expectations are already satisfied and skip sleeping
         var count = 0
         for exp in expectations {
-            if await exp.satisified {
+            if await exp.state == .fulfilled {
                 count += 1
             }
         }
@@ -101,15 +96,19 @@ public actor AsyncExpectation {
                 await cancel()
             }
         }, operation: {
-            try await withCheckedThrowingContinuation { (continuation: AsyncExpectationContinuation) in
-                self.continuation = continuation
+            if state == .fulfilled {
+                return
+            } else {
+                return try await withCheckedThrowingContinuation { (continuation: AsyncExpectationContinuation) in
+                    self.continuation = continuation
+                }
             }
         })
     }
     
     private func timeOut(file: StaticString = #filePath,
                          line: UInt = #line) async {
-        if !satisified && !isInverted {
+        if state != .fulfilled && !isInverted {
             state = .timedOut
             XCTFail("Expectation timed out: \(expectationDescription)", file: file, line: line)
         }
