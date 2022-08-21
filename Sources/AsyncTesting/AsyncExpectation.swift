@@ -40,6 +40,7 @@ public actor AsyncExpectation {
         
         guard !isInverted else {
             XCTFail("Inverted expectation fulfilled: \(expectationDescription)", file: file, line: line)
+            state = .fulfilled
             finish()
             return
         }

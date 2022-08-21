@@ -3,6 +3,13 @@
 
 import PackageDescription
 
+let swiftSettings: [SwiftSetting] = [
+    .unsafeFlags([
+        "-Xfrontend",
+        "-warn-concurrency",
+    ])
+]
+
 let package = Package(
     name: "AsyncTesting",
     platforms: [.macOS(.v12), .iOS(.v13), .tvOS(.v13), .watchOS(.v6)],
@@ -17,10 +24,14 @@ let package = Package(
         .target(
             name: "AsyncTesting",
             dependencies: [],
+            swiftSettings: nil,
             linkerSettings: [.linkedFramework("XCTest")]
         ),
+        
         .testTarget(
             name: "AsyncTestingTests",
-            dependencies: ["AsyncTesting"]),
+            dependencies: ["AsyncTesting"],
+            swiftSettings: swiftSettings
+        ),
     ]
 )
