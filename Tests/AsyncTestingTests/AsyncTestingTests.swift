@@ -4,16 +4,16 @@ import XCTest
 final class AsyncExpectationTests: XCTestCase {
     
     func testDoneExpectation() async throws {
-        let done = AsyncExpectation.expectation(description: "done")
+        let done = asyncExpectation(description: "done")
         Task {
             try await Task.sleep(seconds: 0.1)
             await done.fulfill()
         }
-        try await AsyncExpectation.waitForExpectations([done])
+        try await waitForExpectations([done])
     }
     
     func testDoneMultipleTimesExpectation() async throws {
-        let done = AsyncExpectation.expectation(description: "done", expectedFulfillmentCount: 3)
+        let done = asyncExpectation(description: "done", expectedFulfillmentCount: 3)
         Task {
             try await Task.sleep(seconds: 0.1)
             await done.fulfill()
@@ -26,29 +26,29 @@ final class AsyncExpectationTests: XCTestCase {
             try await Task.sleep(seconds: 0.1)
             await done.fulfill()
         }
-        try await AsyncExpectation.waitForExpectations([done])
+        try await waitForExpectations([done])
     }
     
     func testNotDoneInvertedExpectation() async throws {
-        let notDone = AsyncExpectation.expectation(description: "not done", isInverted: true)
-        try await AsyncExpectation.waitForExpectations([notDone], timeout: 0.1)
+        let notDone = asyncExpectation(description: "not done", isInverted: true)
+        try await waitForExpectations([notDone], timeout: 0.1)
     }
     
     func testDoneAndNotDoneInvertedExpectation() async throws {
-        let done = AsyncExpectation.expectation(description: "done")
-        let notDone = AsyncExpectation.expectation(description: "not done", isInverted: true)
+        let done = asyncExpectation(description: "done")
+        let notDone = asyncExpectation(description: "not done", isInverted: true)
         Task {
             try await Task.sleep(seconds: 0.1)
             await done.fulfill()
         }
-        try await AsyncExpectation.waitForExpectations([notDone], timeout: 0.1)
-        try await AsyncExpectation.waitForExpectations([done])
+        try await waitForExpectations([notDone], timeout: 0.1)
+        try await waitForExpectations([done])
     }
     
     func testMultipleFulfilledExpectation() async throws {
-        let one = AsyncExpectation.expectation(description: "one")
-        let two = AsyncExpectation.expectation(description: "two")
-        let three = AsyncExpectation.expectation(description: "three")
+        let one = asyncExpectation(description: "one")
+        let two = asyncExpectation(description: "two")
+        let three = asyncExpectation(description: "three")
         Task {
             try await Task.sleep(seconds: 0.1)
             await one.fulfill()
@@ -61,17 +61,18 @@ final class AsyncExpectationTests: XCTestCase {
             try await Task.sleep(seconds: 0.1)
             await three.fulfill()
         }
-        try await AsyncExpectation.waitForExpectations([one, two, three])
+        try await waitForExpectations([one, two, three])
     }
     
     func testMultipleAlreadyFulfilledExpectation() async throws {
-        let one = AsyncExpectation.expectation(description: "one")
-        let two = AsyncExpectation.expectation(description: "two")
-        let three = AsyncExpectation.expectation(description: "three")
+        let one = asyncExpectation(description: "one")
+        let two = asyncExpectation(description: "two")
+        let three = asyncExpectation(description: "three")
         await one.fulfill()
         await two.fulfill()
         await three.fulfill()
         
-        try await AsyncExpectation.waitForExpectations([one, two, three])
+        try await waitForExpectations([one, two, three])
     }
+    
 }
