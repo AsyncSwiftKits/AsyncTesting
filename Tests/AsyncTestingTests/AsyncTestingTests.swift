@@ -1,6 +1,34 @@
 import XCTest
 @testable import AsyncTesting
 
+actor AsyncRunner {
+    typealias VoidNeverContinuation = CheckedContinuation<Void, Never>
+    private var continuations: [VoidNeverContinuation] = []
+
+    public func run(timeout: Double = 5.0) async {
+        await withTaskCancellationHandler {
+            Task {
+                await finish()
+            }
+        } operation: {
+            await withCheckedContinuation {
+                continuations.append($0)
+            }
+            Task {
+                try await Task.sleep(seconds: timeout)
+                finish()
+            }
+        }
+    }
+
+    public func finish() {
+        while !continuations.isEmpty {
+            let continuation = continuations.removeFirst()
+            continuation.resume(returning: ())
+        }
+    }
+}
+
 final class AsyncExpectationTests: XCTestCase {
     
     func testDoneExpectation() async throws {
@@ -41,6 +69,23 @@ final class AsyncExpectationTests: XCTestCase {
         // cancel immediately to prevent fulfill from being run
         task.cancel()
         try await waitForExpectations([notDone], timeout: delay * 2)
+    }
+
+    func testNotYetDoneAndThenDoneExpectation() async throws {
+        let delay = 0.01
+        let notYetDone = asyncExpectation(description: "not yet done", isInverted: true)
+        let done = asyncExpectation(description: "done")
+
+        let task = Task {
+            await AsyncRunner().run()
+            XCTAssertTrue(Task.isCancelled)
+            await notYetDone.fulfill() // will timeout before being called
+            await done.fulfill() // will be called after cancellation
+        }
+
+        try await waitForExpectations([notYetDone], timeout: delay)
+        task.cancel()
+        try await waitForExpectations([done])
     }
     
     func testDoneAndNotDoneInvertedExpectation() async throws {
@@ -91,5 +136,5 @@ final class AsyncExpectationTests: XCTestCase {
         
         try await waitForExpectations([one, two, three])
     }
-    
+
 }

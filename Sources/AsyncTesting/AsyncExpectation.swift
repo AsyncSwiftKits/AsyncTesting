@@ -34,14 +34,20 @@ public actor AsyncExpectation {
         self.isInverted = isInverted
         self.expectedFulfillmentCount = expectedFulfillmentCount
     }
-    
+
+    /// Marks the expectation as having been met.
+    ///
+    /// It is an error to call this method on an expectation that has already been fulfilled,
+    /// or when the test case that vended the expectation has already completed.
     public func fulfill(file: StaticString = #filePath, line: UInt = #line) {
         guard state != .fulfilled else { return }
-        
-        guard !isInverted else {
-            XCTFail("Inverted expectation fulfilled: \(expectationDescription)", file: file, line: line)
-            state = .fulfilled
-            finish()
+
+        if isInverted {
+            if state != .timedOut {
+                XCTFail("Inverted expectation fulfilled: \(expectationDescription)", file: file, line: line)
+                state = .fulfilled
+                finish()
+            }
             return
         }
         
@@ -70,7 +76,9 @@ public actor AsyncExpectation {
     
     internal func timeOut(file: StaticString = #filePath,
                           line: UInt = #line) async {
-        if state != .fulfilled && !isInverted {
+        if isInverted {
+            state = .timedOut
+        } else if state != .fulfilled {
             state = .timedOut
             XCTFail("Expectation timed out: \(expectationDescription)", file: file, line: line)
         }

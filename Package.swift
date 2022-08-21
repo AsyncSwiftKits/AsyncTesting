@@ -27,7 +27,6 @@ let package = Package(
             swiftSettings: nil,
             linkerSettings: [.linkedFramework("XCTest")]
         ),
-        
         .testTarget(
             name: "AsyncTestingTests",
             dependencies: ["AsyncTesting"],
