@@ -5,19 +5,14 @@ actor AsyncRunner {
     typealias VoidNeverContinuation = CheckedContinuation<Void, Never>
     private var continuations: [VoidNeverContinuation] = []
 
-    public func run(timeout: Double = 5.0) async {
+    public nonisolated func run(timeout: Double = 5.0) async {
         await withTaskCancellationHandler {
             Task {
                 await finish()
             }
+            print("cancel")
         } operation: {
-            await withCheckedContinuation {
-                continuations.append($0)
-            }
-            Task {
-                try await Task.sleep(seconds: timeout)
-                finish()
-            }
+            await handleRun(timeout: timeout)
         }
     }
 
@@ -25,6 +20,16 @@ actor AsyncRunner {
         while !continuations.isEmpty {
             let continuation = continuations.removeFirst()
             continuation.resume(returning: ())
+        }
+    }
+    
+    private func handleRun(timeout: Double) async {
+        await withCheckedContinuation {
+            continuations.append($0)
+        }
+        Task {
+            try await Task.sleep(seconds: timeout)
+            finish()
         }
     }
 }
@@ -70,19 +75,19 @@ final class AsyncExpectationTests: XCTestCase {
         task.cancel()
         try await waitForExpectations([notDone], timeout: delay * 2)
     }
-
+    
     func testNotYetDoneAndThenDoneExpectation() async throws {
         let delay = 0.01
         let notYetDone = asyncExpectation(description: "not yet done", isInverted: true)
         let done = asyncExpectation(description: "done")
-
+        
         let task = Task {
             await AsyncRunner().run()
             XCTAssertTrue(Task.isCancelled)
             await notYetDone.fulfill() // will timeout before being called
             await done.fulfill() // will be called after cancellation
         }
-
+        
         try await waitForExpectations([notYetDone], timeout: delay)
         task.cancel()
         try await waitForExpectations([done])
@@ -136,5 +141,5 @@ final class AsyncExpectationTests: XCTestCase {
         
         try await waitForExpectations([one, two, three])
     }
-
+    
 }

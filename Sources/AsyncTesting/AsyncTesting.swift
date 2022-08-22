@@ -37,6 +37,12 @@ public enum AsyncTesting {
             }
         }
         
+        try await waitUsingTaskGroup(expectations)
+        
+        timeout.cancel()
+    }
+    
+    private static func waitUsingTaskGroup(_ expectations: [AsyncExpectation]) async throws {
         await withThrowingTaskGroup(of: Void.self) { group in
             for exp in expectations {
                 group.addTask {
@@ -44,8 +50,6 @@ public enum AsyncTesting {
                 }
             }
         }
-        
-        timeout.cancel()
     }
     
 }
