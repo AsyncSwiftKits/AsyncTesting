@@ -43,7 +43,7 @@ final class AsyncExpectationTests: XCTestCase {
             try await Task.sleep(seconds: delay)
             await done.fulfill()
         }
-        try await waitForExpectations([done])
+        await waitForExpectations([done])
     }
     
     func testDoneMultipleTimesExpectation() async throws {
@@ -61,7 +61,7 @@ final class AsyncExpectationTests: XCTestCase {
             try await Task.sleep(seconds: delay)
             await done.fulfill()
         }
-        try await waitForExpectations([done])
+        await waitForExpectations([done])
     }
     
     func testNotDoneInvertedExpectation() async throws {
@@ -73,7 +73,7 @@ final class AsyncExpectationTests: XCTestCase {
         }
         // cancel immediately to prevent fulfill from being run
         task.cancel()
-        try await waitForExpectations([notDone], timeout: delay * 2)
+        await waitForExpectations([notDone], timeout: delay * 2)
     }
     
     func testNotYetDoneAndThenDoneExpectation() async throws {
@@ -88,9 +88,9 @@ final class AsyncExpectationTests: XCTestCase {
             await done.fulfill() // will be called after cancellation
         }
         
-        try await waitForExpectations([notYetDone], timeout: delay)
+        await waitForExpectations([notYetDone], timeout: delay)
         task.cancel()
-        try await waitForExpectations([done])
+        await waitForExpectations([done])
     }
     
     func testDoneAndNotDoneInvertedExpectation() async throws {
@@ -107,8 +107,8 @@ final class AsyncExpectationTests: XCTestCase {
             // cancel immediately to prevent fulfill from being run
             task.cancel()
         }
-        try await waitForExpectations([notDone], timeout: delay * 2)
-        try await waitForExpectations([done])
+        await waitForExpectations([notDone], timeout: delay * 2)
+        await waitForExpectations([done])
     }
     
     func testMultipleFulfilledExpectation() async throws {
@@ -128,7 +128,7 @@ final class AsyncExpectationTests: XCTestCase {
             try await Task.sleep(seconds: delay)
             await three.fulfill()
         }
-        try await waitForExpectations([one, two, three])
+        await waitForExpectations([one, two, three])
     }
     
     func testMultipleAlreadyFulfilledExpectation() async throws {
@@ -139,7 +139,7 @@ final class AsyncExpectationTests: XCTestCase {
         await two.fulfill()
         await three.fulfill()
         
-        try await waitForExpectations([one, two, three])
+        await waitForExpectations([one, two, three])
     }
     
 }

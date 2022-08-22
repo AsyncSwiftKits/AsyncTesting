@@ -24,13 +24,13 @@ let package = Package(
         .target(
             name: "AsyncTesting",
             dependencies: [],
-            swiftSettings: swiftSettings,
+            swiftSettings: nil,
             linkerSettings: [.linkedFramework("XCTest")]
         ),
         .testTarget(
             name: "AsyncTestingTests",
             dependencies: ["AsyncTesting"],
-            swiftSettings: swiftSettings
+            swiftSettings: nil
         ),
     ]
 )

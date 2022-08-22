@@ -11,12 +11,11 @@ public enum AsyncTesting {
                          expectedFulfillmentCount: expectedFulfillmentCount)
     }
     
-    
     @MainActor
     public static func waitForExpectations(_ expectations: [AsyncExpectation],
                                            timeout: Double = 1.0,
                                            file: StaticString = #filePath,
-                                           line: UInt = #line) async throws {
+                                           line: UInt = #line) async {
         guard !expectations.isEmpty else { return }
         
         // check if all expectations are already satisfied and skip sleeping
@@ -37,16 +36,16 @@ public enum AsyncTesting {
             }
         }
         
-        try await waitUsingTaskGroup(expectations)
+        await waitUsingTaskGroup(expectations)
         
         timeout.cancel()
     }
     
-    private static func waitUsingTaskGroup(_ expectations: [AsyncExpectation]) async throws {
-        await withThrowingTaskGroup(of: Void.self) { group in
+    private static func waitUsingTaskGroup(_ expectations: [AsyncExpectation]) async {
+        await withTaskGroup(of: Void.self) { group in
             for exp in expectations {
                 group.addTask {
-                    try await exp.wait()
+                    try? await exp.wait()
                 }
             }
         }

@@ -7,7 +7,7 @@ extension XCTestCase {
     ///
     /// Use this method to create ``AsyncExpectation`` instances that can be
     /// fulfilled when asynchronous tasks in your tests complete.
-    /// 
+    ///
     /// To fulfill an expectation that was created with `asyncExpectation(description:)`,
     /// call the expectation's `fulfill()` method when the asynchronous task in your
     /// test has completed.
@@ -32,11 +32,11 @@ extension XCTestCase {
     public func waitForExpectations(_ expectations: [AsyncExpectation],
                                     timeout: Double = 1.0,
                                     file: StaticString = #filePath,
-                                    line: UInt = #line) async throws {
-        try await AsyncTesting.waitForExpectations(expectations,
-                                                   timeout: timeout,
-                                                   file: file,
-                                                   line: line)
+                                    line: UInt = #line) async {
+        await AsyncTesting.waitForExpectations(expectations,
+                                               timeout: timeout,
+                                               file: file,
+                                               line: line)
     }
     
 }
