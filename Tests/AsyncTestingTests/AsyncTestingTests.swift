@@ -7,12 +7,11 @@ actor AsyncRunner {
 
     public nonisolated func run(timeout: Double = 5.0) async {
         await withTaskCancellationHandler {
+            await handleRun(timeout: timeout)
+        } onCancel: {
             Task {
                 await finish()
             }
-            print("cancel")
-        } operation: {
-            await handleRun(timeout: timeout)
         }
     }
 

@@ -59,13 +59,13 @@ public actor AsyncExpectation {
     }
     
     internal nonisolated func wait() async throws {
-        try await withTaskCancellationHandler(handler: {
+        try await withTaskCancellationHandler {
+            try await handleWait()
+        } onCancel: {
             Task {
                 await cancel()
             }
-        }, operation: {
-            try await handleWait()
-        })
+        }
     }
     
     internal func timeOut(file: StaticString = #filePath,
