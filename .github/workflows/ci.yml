@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: 
+      - "main"
+    paths:
+      - 'Sources/**'
+      - 'Tests/**'
+      - '.github/workflows/**'
+      - 'Package.swift'
+  pull_request:
+    branches: 
+      - "main"
+    paths:
+      - 'Sources/**'
+      - 'Tests/**'
+      - '.github/workflows/**'
+      - 'Package.swift'
+
+jobs:
+  macOS:
+    name: Test macOS, All Xcodes and Swifts
+    runs-on: ${{ matrix.runsOn }}
+    env:
+      DEVELOPER_DIR: "/Applications/${{ matrix.xcode }}/Contents/Developer"
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - xcode: "Xcode_13.4.1.app"
+            runsOn: macOS-12
+            name: "macOS 12, Xcode 13.4.1, Swift 5.6.1"
+          - xcode: "Xcode_13.3.1.app"
+            runsOn: macOS-12
+            name: "macOS 12, Xcode 13.3.1, Swift 5.6"
+    steps:
+      - uses: actions/checkout@v3
+      - name: ${{ matrix.name }}
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "AsyncTesting" -destination "platform=macOS" clean test | xcpretty
+  iOS:
+    name: "Test iOS"
+    runs-on: macOS-12
+    env:
+      DEVELOPER_DIR: "/Applications/Xcode_13.4.1.app/Contents/Developer"
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - destination: "OS=14.5,name=iPhone 12 Pro"
+            name: "iOS 14.5"
+            testPlan: "iOS"
+          - destination: "OS=13.7,name=iPhone 11 Pro"
+            name: "iOS 13.7"
+            testPlan: "iOS"
+    steps:
+      - uses: actions/checkout@v3
+      - name: ${{ matrix.name }}
+        run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -scheme "AsyncTesting" -destination "${{ matrix.destination }}" clean test | xcpretty
