@@ -31,11 +31,11 @@ jobs:
         include:
           - xcode: "Xcode_13.4.1.app"
             runsOn: macOS-12
-            destination: platform=macOS,arch=arm64
+            destination: "platform=macOS"
             name: "macOS 12, Xcode 13.4.1, Swift 5.6.1"
           - xcode: "Xcode_13.3.1.app"
             runsOn: macOS-12
-            destination: platform=macOS,arch=arm64
+            destination: "platform=macOS"
             name: "macOS 12, Xcode 13.3.1, Swift 5.6"
     steps:
       - uses: actions/checkout@v3
@@ -52,13 +52,9 @@ jobs:
       matrix:
         include:
           - xcode: "Xcode_13.4.1.app"
-            destination: "platform=iOS Simulator,OS=15.5,name=iPhone 13 Pro"
+            destination: "platform=iOS Simulator,OS=15.4"
             runsOn: macOS-12
-            name: "iOS 15.5"
-          - xcode: "Xcode_13.3.1.app"
-            destination: "platform=iOS Simulator,OS=14.5,name=iPhone 12 Pro"
-            runsOn: macOS-12
-            name: "iOS 14.5"
+            name: "iOS 15.4"
     steps:
       - uses: actions/checkout@v3
       - name: ${{ matrix.name }}
