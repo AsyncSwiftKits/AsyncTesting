@@ -29,8 +29,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: ['13.2.1']
-        macos: ['macos-11', 'macos-12']
+        xcode: ['13.4.1']
+        macos: ['macos-12']
         scheme: ['AsyncTesting']
         command: ['test']
         platform: ['macOS', 'iOS', 'tvOS', 'watchOS', 'mac-catalyst']
