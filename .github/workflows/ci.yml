@@ -52,7 +52,7 @@ jobs:
       matrix:
         include:
           - xcode: "Xcode_13.4.1.app"
-            destination: "platform=iOS Simulator,OS=15.5"
+            destination: "platform=iOS Simulator,OS=15.5,name=iPhone 13 mini"
             runsOn: macOS-12
             name: "iOS Simulator"
     steps:
