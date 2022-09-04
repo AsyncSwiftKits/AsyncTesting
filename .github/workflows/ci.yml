@@ -35,10 +35,10 @@ jobs:
         command: ['test']
         platform: ['macOS', 'iOS', 'tvOS', 'watchOS', 'mac-catalyst']
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1.2.3
+    - uses: maxim-lobanov/setup-xcode@v1.4.1
       with:
         xcode-version: ${{ matrix.xcode }}
-    - uses: mxcl/xcodebuild@v1.9.2
+    - uses: mxcl/xcodebuild@v1.11.0
       with:
         platform: ${{ matrix.platform }}
         scheme: ${{ matrix.scheme }}
