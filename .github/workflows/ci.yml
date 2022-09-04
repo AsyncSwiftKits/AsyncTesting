@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   build:
-    name: "Test Apple Platforms"name: ${{ matrix.command }} on  ${{ matrix.platform }} (xcode ${{ matrix.xcode }}, ${{ matrix.macos }})
+    name: ${{ matrix.command }} on  ${{ matrix.platform }} (xcode ${{ matrix.xcode }}, ${{ matrix.macos }})
     runs-on: ${{ matrix.macos }} #os switching
     timeout-minutes: 10
     strategy:
