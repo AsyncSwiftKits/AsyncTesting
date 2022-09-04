@@ -27,7 +27,7 @@ jobs:
     runs-on: ${{ matrix.macos }} #os switching
     timeout-minutes: 10
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         xcode: ['13.4.1']
         macos: ['macos-12']
