@@ -18,6 +18,9 @@ on:
       - '.github/workflows/**'
       - 'Package.swift'
 
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   macOS:
     name: "Test macOS"
