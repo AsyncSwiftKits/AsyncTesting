@@ -24,8 +24,10 @@ concurrency:
 
 jobs:
   build:
+    name: ${{ matrix.command }} on  ${{ matrix.platform }} (xcode ${{ matrix.xcode }}, swift ${{ matrix.swift }})
     runs-on: macos-12
     strategy:
+      fail-fast: true
       matrix:
         platform:
           - macOS
@@ -36,6 +38,8 @@ jobs:
           - ^13
         swift:
           - ~5.6
+        command:
+          - test
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -48,7 +52,7 @@ jobs:
         with:
           xcode: ${{ matrix.xcode }}
           platform: ${{ matrix.platform }}
-          action: test
+          action: ${{ matrix.command }}
           code-coverage: true
           warnings-as-errors: true
           configuration: debug
