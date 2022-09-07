@@ -39,7 +39,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls -laR ${{ github.workspace }}
-      - uses: mxcl/xcodebuild@v1
+      - uses: mxcl/xcodebuild@v1.11.0
         with:
           xcode: ${{ matrix.xcode }}
           platform: ${{ matrix.platform }}
