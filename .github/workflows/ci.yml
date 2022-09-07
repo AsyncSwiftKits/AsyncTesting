@@ -41,3 +41,4 @@ jobs:
           code-coverage: true
           warnings-as-errors: true
           configuration: debug
+          working-directory: ..
