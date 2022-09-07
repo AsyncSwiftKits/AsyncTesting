@@ -46,3 +46,4 @@ jobs:
         code-coverage: true
         verbosity: xcpretty
         upload-logs: always
+        working-directory: "."
