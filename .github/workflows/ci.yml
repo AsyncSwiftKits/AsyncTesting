@@ -40,5 +40,5 @@ jobs:
           "platform=watchOS,OS=7.0"
 
   steps:
-    - name: "Using xcodebuild to ${{ matrix.command }} the ${{ matrix.scheme }} scheme on ${ matrix.destination}."
-      run: xcodebuild -scheme ${{ matrix.scheme }} -destination "${ matrix.destination}" ${{ matrix.command }} 
+    - name: "Using xcodebuild to ${{ matrix.command }} the ${{ matrix.scheme }} scheme on ${ matrix.destination }."
+      run: xcodebuild -scheme ${{ matrix.scheme }} -destination "${ matrix.destination }" ${{ matrix.command }} 
