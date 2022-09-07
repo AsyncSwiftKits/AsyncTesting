@@ -1,4 +1,4 @@
-name: CI
+name: Swift
 
 on:
   push:
@@ -18,26 +18,14 @@ on:
       - '.github/workflows/**'
       - 'Package.swift'
 
-concurrency: 
-  group: ${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   build:
-    name: ${{ matrix.command }} on  ${{ matrix.platform }} (xcode ${{ matrix.xcode }}, ${{ matrix.macos }})
-    runs-on: ${{ matrix.macos }} #os switching
-    timeout-minutes: 10
-    strategy:
-      fail-fast: true
-      matrix:
-        xcode: ['13.4.1']
-        macos: ['macos-12']
-        scheme: ['AsyncTesting']
-        command: ['test']
-        destination: |
-          "platform=macOS"
-          "platform=iOS Simulator,OS=16.0"
-          "platform=tvOS,OS=16.0"
-          "platform=watchOS,OS=7.0"
-  steps:
-    - name: "Using xcodebuild to ${{ matrix.command }} the ${{ matrix.scheme }} scheme on ${ matrix.destination }."
-      run: xcodebuild -scheme ${{ matrix.scheme }} -destination "${ matrix.destination }" ${{ matrix.command }} 
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: swift build -v
+    - name: Run tests
+      run: swift test -v
