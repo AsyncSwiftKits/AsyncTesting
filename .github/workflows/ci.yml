@@ -39,6 +39,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - name: Check Xcode Installed Versions
+        run: |
+          ls -n /Applications/ | grep Xcode*
       - uses: mxcl/xcodebuild@v1
         with:
           xcode: ${{ matrix.xcode }}
