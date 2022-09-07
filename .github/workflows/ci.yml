@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}
+          ls ${{ github.workspace }}/..
       - uses: mxcl/xcodebuild@v1
         with:
           xcode: ${{ matrix.xcode }}
