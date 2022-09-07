@@ -41,4 +41,4 @@ jobs:
           code-coverage: true
           warnings-as-errors: true
           configuration: debug
-          working-directory: ..
+          working-directory: "$PROJECT_DIR"
