@@ -43,11 +43,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Post Checkout
-        run: |
-          echo "💡 Repository ${{ github.repository }} has been cloned to the runner."
-          ls ${{ github.workspace }}
-          ls -n /Applications/ | grep Xcode*
       - name: Xcode build
         uses: mxcl/xcodebuild@v1
         with:
