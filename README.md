@@ -1,5 +1,7 @@
 # AsyncTesting
 
+![CI](https://github.com/brennanMKE/AsyncTesting/actions/workflows/ci.yml/badge.svg)
+
 Xcode includes XCTest which only has [waitForExpectations(timeout:handler:)] to support async tests. It does not support waiting on a given list of expectations which is necessary for more complex async activity. The original [wait(for:timeout:enforceOrder:)] function does take a list of expectations but is not compatible with modern Swift Concurrency.
 
 This package extends `XCTestCase` to include the `asyncExpectation` and `waitForExpectations` functions shown below which mimic existing functions to create and wait on expectations. See the unit tests for more reference code.
