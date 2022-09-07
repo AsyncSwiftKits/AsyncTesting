@@ -48,7 +48,8 @@ jobs:
           echo "💡 Repository ${{ github.repository }} has been cloned to the runner."
           ls ${{ github.workspace }}
           ls -n /Applications/ | grep Xcode*
-      - uses: mxcl/xcodebuild@v1
+      - name: Xcode build
+        uses: mxcl/xcodebuild@v1
         with:
           xcode: ${{ matrix.xcode }}
           platform: ${{ matrix.platform }}
