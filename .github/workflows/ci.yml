@@ -42,6 +42,9 @@ jobs:
       - name: Check Xcode Installed Versions
         run: |
           ls -n /Applications/ | grep Xcode*
+      - name: Check Xcode with Ruby
+        run: |
+          bundle exec xcversion installed
       - uses: mxcl/xcodebuild@v1
         with:
           xcode: ${{ matrix.xcode }}
