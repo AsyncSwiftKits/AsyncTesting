@@ -18,6 +18,10 @@ on:
       - '.github/workflows/**'
       - 'Package.swift'
 
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: macos-12
@@ -39,7 +43,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-      - name: Check Xcode Installed Versions
+      - name: List Installed Xcode Versions
         run: |
           ls -n /Applications/ | grep Xcode*
       - uses: mxcl/xcodebuild@v1
