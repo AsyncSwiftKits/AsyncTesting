@@ -33,17 +33,12 @@ jobs:
         macos: ['macos-12']
         scheme: ['AsyncTesting']
         command: ['test']
-        platform: ['macOS', 'iOS', 'tvOS', 'watchOS', 'mac-catalyst']
-    steps:
-    - uses: maxim-lobanov/setup-xcode@v1.4.1
-      with:
-        xcode-version: ${{ matrix.xcode }}
-    - uses: mxcl/xcodebuild@v1.11.0
-      with:
-        platform: ${{ matrix.platform }}
-        scheme: ${{ matrix.scheme }}
-        action: ${{ matrix.command }} 
-        code-coverage: true
-        verbosity: xcpretty
-        upload-logs: always
-        working-directory: ".."
+        destination: |
+          "platform=macOS"
+          "platform=iOS Simulator,OS=16.0"
+          "platform=tvOS,OS=16.0"
+          "platform=watchOS,OS=7.0"
+
+  steps:
+      - name: "Using xcodebuild to ${{ matrix.command }} the ${{ matrix.scheme }} scheme on ${ matrix.destination}."
+        run: xcodebuild -scheme ${{ matrix.scheme }} -destination "${ matrix.destination}" ${{ matrix.command }} 
