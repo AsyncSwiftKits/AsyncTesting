@@ -1,22 +1,8 @@
-name: CI
+name: Nightly
 
 on:
-  push:
-    branches: 
-      - "main"
-    paths:
-      - 'Sources/**'
-      - 'Tests/**'
-      - '.github/workflows/**'
-      - 'Package.swift'
-  pull_request:
-    branches: 
-      - "main"
-    paths:
-      - 'Sources/**'
-      - 'Tests/**'
-      - '.github/workflows/**'
-      - 'Package.swift'
+  schedule:
+    - cron: '30 4 * * *'
 
 concurrency: 
   group: ${{ github.ref }}
